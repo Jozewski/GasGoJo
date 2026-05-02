@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:get_it/get_it.dart';
-import 'package:flutter/foundation.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'app/app.dart';
 import 'core/constants/app_constants.dart';
@@ -44,11 +42,6 @@ void main() async {
       options: DefaultFirebaseOptions.currentPlatform,
     );
     firebaseAvailable = true;
-
-    // Route Flutter errors to Crashlytics in release mode (not supported on Windows)
-    if (!kIsWeb && defaultTargetPlatform != TargetPlatform.windows) {
-      FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
-    }
 
     // Enable Firestore offline persistence
     FirebaseFirestore.instance.settings = const Settings(

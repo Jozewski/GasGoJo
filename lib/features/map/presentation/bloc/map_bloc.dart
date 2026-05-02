@@ -23,6 +23,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     on<MapSortChanged>(_onSortChanged);
     on<MapRefreshRequested>(_onRefreshRequested);
     on<MapSearchLocationSelected>(_onSearchLocationSelected);
+    on<MapStationPriceUpdated>(_onStationPriceUpdated);
   }
 
   final StationRepository _repo;
@@ -79,6 +80,15 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   Future<void> _onSearchLocationSelected(MapSearchLocationSelected event, Emitter<MapState> emit) async {
     _currentCenter = event.location;
     await _fetchStations(emit, event.location);
+  }
+
+  void _onStationPriceUpdated(MapStationPriceUpdated event, Emitter<MapState> emit) {
+    final current = state;
+    if (current is! MapLoaded) return;
+    final updated = current.stations.map((s) {
+      return s.id == event.station.id ? event.station : s;
+    }).toList();
+    emit(current.copyWith(stations: updated));
   }
 
   // ── Helpers ───────────────────────────────────────────────────────────────

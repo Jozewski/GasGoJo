@@ -6,6 +6,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../core/constants/app_constants.dart';
+import '../../../../shared/models/gas_station.dart';
 import '../../../../shared/widgets/shared_widgets.dart';
 import '../bloc/map_bloc.dart';
 import '../bloc/map_event.dart';
@@ -76,7 +77,8 @@ class _MapScreenState extends State<MapScreen> {
                 children: [
                   Expanded(
                     child: _MapPane(
-                      map: _buildGoogleMap(context, state, isDesktopLayout: true),
+                      map: _buildGoogleMap(context, state,
+                          isDesktopLayout: true),
                       searchBar: _SearchBar(
                         controller: _searchController,
                         onMenuTap: () => context.push('/favorites'),
@@ -202,7 +204,9 @@ class _MapScreenState extends State<MapScreen> {
         (bounds.northeast.latitude + bounds.southwest.latitude) / 2,
         (bounds.northeast.longitude + bounds.southwest.longitude) / 2,
       );
-      context.read<MapBloc>().add(MapCameraIdle(center, AppConstants.defaultZoom));
+      context
+          .read<MapBloc>()
+          .add(MapCameraIdle(center, AppConstants.defaultZoom));
     });
   }
 
@@ -255,8 +259,18 @@ class _MapScreenState extends State<MapScreen> {
         icon: BitmapDescriptor.defaultMarkerWithHue(color),
         infoWindow: InfoWindow(
           title: station.name,
-          snippet: price != null ? '\$${price.toStringAsFixed(2)}/gal' : 'Price N/A',
-          onTap: () => context.push('/station/${station.id}', extra: station),
+          snippet:
+              price != null ? '\$${price.toStringAsFixed(2)}/gal' : 'Price N/A',
+          onTap: () async {
+            final bloc = context.read<MapBloc>();
+            final updated = await context.push<GasStation>(
+              '/station/${station.id}',
+              extra: station,
+            );
+            if (updated != null) {
+              bloc.add(MapStationPriceUpdated(updated));
+            }
+          },
         ),
         onTap: () {},
       );
@@ -264,7 +278,9 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   PriceTier _priceTier(double? price, double? min, double? max) {
-    if (price == null || min == null || max == null || max == min) return PriceTier.neutral;
+    if (price == null || min == null || max == null || max == min) {
+      return PriceTier.neutral;
+    }
     final range = max - min;
     if (price <= min + range * 0.33) return PriceTier.cheap;
     if (price <= min + range * 0.66) return PriceTier.mid;
@@ -283,7 +299,9 @@ class _MapScreenState extends State<MapScreen> {
           'Enable it in Settings > Apps > GasGojo > Permissions.',
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
+          TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancel')),
           FilledButton(
             onPressed: () {
               Navigator.pop(context);
@@ -295,7 +313,6 @@ class _MapScreenState extends State<MapScreen> {
       ),
     );
   }
-
 }
 
 class _MapPane extends StatelessWidget {
@@ -393,7 +410,8 @@ class _SearchBar extends StatelessWidget {
               // Menu icon with primary color tint
               IconButton(
                 onPressed: onMenuTap,
-                icon: const Icon(Icons.menu_rounded, size: 22, color: AppColors.textSecondary),
+                icon: const Icon(Icons.menu_rounded,
+                    size: 22, color: AppColors.textSecondary),
                 tooltip: 'Menu',
               ),
 
@@ -402,7 +420,8 @@ class _SearchBar extends StatelessWidget {
               const SizedBox(width: 10),
 
               // Search icon + field
-              const Icon(Icons.search_rounded, size: 18, color: AppColors.textDisabled),
+              const Icon(Icons.search_rounded,
+                  size: 18, color: AppColors.textDisabled),
               const SizedBox(width: 8),
               Expanded(
                 child: TextField(
@@ -414,7 +433,8 @@ class _SearchBar extends StatelessWidget {
                     focusedBorder: InputBorder.none,
                     filled: false,
                     contentPadding: EdgeInsets.zero,
-                    hintStyle: TextStyle(fontSize: 14, color: AppColors.textDisabled),
+                    hintStyle:
+                        TextStyle(fontSize: 14, color: AppColors.textDisabled),
                   ),
                   style: const TextStyle(
                     fontSize: 14,
@@ -430,11 +450,14 @@ class _SearchBar extends StatelessWidget {
                 icon: Stack(
                   clipBehavior: Clip.none,
                   children: [
-                    const Icon(Icons.notifications_none_rounded, size: 22, color: AppColors.textSecondary),
+                    const Icon(Icons.notifications_none_rounded,
+                        size: 22, color: AppColors.textSecondary),
                     Positioned(
-                      top: -2, right: -2,
+                      top: -2,
+                      right: -2,
                       child: Container(
-                        width: 8, height: 8,
+                        width: 8,
+                        height: 8,
                         decoration: const BoxDecoration(
                           color: AppColors.primary,
                           shape: BoxShape.circle,

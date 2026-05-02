@@ -15,10 +15,8 @@ dependencies:
   firebase_auth: ^5.1.4
   cloud_firestore: ^5.2.1
   cloud_functions: ^5.1.0
-  firebase_messaging: ^15.0.4
-  firebase_analytics: ^11.2.1
-  firebase_remote_config: ^5.1.2
-  firebase_crashlytics: ^4.0.4
+  # firebase_messaging, firebase_analytics, firebase_remote_config, firebase_crashlytics
+  # are not yet implemented — add back when features are built out
 
   # Maps & Location
   google_maps_flutter: ^2.7.0

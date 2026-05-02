@@ -163,26 +163,26 @@ class PlacesStationRepository implements StationRepository {
     try {
       final now = DateTime.now().millisecondsSinceEpoch;
 
-      // Store current price (merge so other grades are preserved)
-      await _firestore.collection('stationPrices').doc(stationId).set(
-        {
-          'prices': {grade.name: price},
-          'updatedAt': now,
-        },
-        SetOptions(merge: true),
-      );
-
-      // Log to price history
-      await _firestore
-          .collection('priceHistory')
-          .doc(stationId)
-          .collection('entries')
-          .add({
-        'grade': grade.name,
-        'price': price,
-        'reportedBy': userId,
-        'reportedAt': FieldValue.serverTimestamp(),
-      });
+      // Run both writes in parallel — they are independent
+      await Future.wait([
+        _firestore.collection('stationPrices').doc(stationId).set(
+          {
+            'prices': {grade.name: price},
+            'updatedAt': now,
+          },
+          SetOptions(merge: true),
+        ),
+        _firestore
+            .collection('priceHistory')
+            .doc(stationId)
+            .collection('entries')
+            .add({
+          'grade': grade.name,
+          'price': price,
+          'reportedBy': userId,
+          'reportedAt': FieldValue.serverTimestamp(),
+        }),
+      ]);
 
       return const Right(null);
     } on FirebaseException catch (e) {

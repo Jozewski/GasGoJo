@@ -59,3 +59,10 @@ class MapSearchLocationSelected extends MapEvent {
   @override
   List<Object?> get props => [location];
 }
+
+class MapStationPriceUpdated extends MapEvent {
+  const MapStationPriceUpdated(this.station);
+  final GasStation station;
+  @override
+  List<Object?> get props => [station.id];
+}
