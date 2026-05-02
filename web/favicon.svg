@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <!-- Background circle -->
+  <circle cx="16" cy="16" r="16" fill="#0F172A"/>
+  <!-- Pump body -->
+  <rect x="7" y="13" width="11" height="13" rx="1.5" fill="#F97316"/>
+  <!-- Pump top panel (display) -->
+  <rect x="9" y="15" width="7" height="4" rx="0.8" fill="#0F172A"/>
+  <!-- Nozzle arm -->
+  <path d="M18 15 L22 15 L22 12 L24 12" stroke="#F97316" stroke-width="2" stroke-linecap="round" fill="none"/>
+  <!-- Nozzle head -->
+  <rect x="23" y="10" width="3" height="4" rx="1" fill="#FB923C"/>
+  <!-- Pump base -->
+  <rect x="6" y="26" width="13" height="2" rx="1" fill="#FB923C"/>
+  <!-- Dollar sign on pump body -->
+  <text x="12.5" y="24.5" text-anchor="middle" font-family="Arial,sans-serif" font-size="7" font-weight="bold" fill="#4ADE80">$</text>
+</svg>

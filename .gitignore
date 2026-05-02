@@ -1,0 +1,116 @@
+# ─── Flutter SDK (never commit the local SDK copy) ────────────────────────
+flutter/
+
+# ─── Node modules (root level) ────────────────────────────────────────────
+node_modules/
+
+# ─── Flutter ──────────────────────────────────────────────────────────────
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+flutter_*.png
+*.dart.js
+*.dart.precompiled
+*.js.deps
+*.js.map
+
+# ─── Dart ─────────────────────────────────────────────────────────────────
+.dart_tool/
+doc/api/
+.packages
+.pub/
+pubspec.lock
+
+# ─── Android ──────────────────────────────────────────────────────────────
+**/android/**/gradle-wrapper.jar
+**/android/.gradle
+**/android/captures/
+**/android/gradlew
+**/android/gradlew.bat
+**/android/local.properties
+**/android/**/GeneratedPluginRegistrant.java
+**/android/app/debug.keystore
+
+# ── NEVER commit these — contain secrets ──────────────────────────────────
+android/key.properties
+android/app/google-services.json
+*.jks
+*.keystore
+lib/firebase_options.dart
+lib/core/constants/api_keys.dart
+
+# ─── iOS ──────────────────────────────────────────────────────────────────
+**/ios/**/*.mode1v3
+**/ios/**/*.mode2v3
+**/ios/**/*.moved-aside
+**/ios/**/*.pbxuser
+**/ios/**/*.perspectivev3
+**/ios/**/*sync/
+**/ios/**/.sconsign.dblite
+**/ios/**/.tags*
+**/ios/**/.vagrant/
+**/ios/**/DerivedData/
+**/ios/**/Icon?
+**/ios/**/Pods/
+**/ios/**/.symlinks/
+**/ios/**/profile
+**/ios/**/xcuserdata
+**/ios/.generated/
+**/ios/Flutter/.last_build_id
+**/ios/Flutter/App.framework
+**/ios/Flutter/Flutter.framework
+**/ios/Flutter/Flutter.podspec
+**/ios/Flutter/Generated.xcconfig
+**/ios/Flutter/ephemeral/
+**/ios/Flutter/flutter_export_environment.sh
+**/ios/ServiceDefinitions.json
+**/ios/Runner/GeneratedPluginRegistrant.*
+
+# ─── Firebase ─────────────────────────────────────────────────────────────
+.firebase/
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+database-debug.log
+
+# ─── Cloud Functions ──────────────────────────────────────────────────────
+functions/node_modules/
+functions/.env
+functions/.env.local
+functions/.runtimeconfig.json
+
+# ─── Environment / Secrets ────────────────────────────────────────────────
+.env
+.env.local
+.env.production
+*.pem
+*.p12
+*.p8
+secrets/
+
+# ─── IDE ──────────────────────────────────────────────────────────────────
+.idea/
+.vscode/settings.json
+.vscode/launch.json
+*.iml
+*.ipr
+*.iws
+.DS_Store
+Thumbs.db
+
+# ─── Dev-only seed scripts (contain Firebase project config) ──────────────
+seed.js
+seed_eia_prices.js
+
+# ─── Coverage & Testing ───────────────────────────────────────────────────
+coverage/
+*.lcov
+
+# ─── Generated Files ──────────────────────────────────────────────────────
+# Uncomment these if you commit generated code (freezed, json_serializable)
+# *.g.dart
+# *.freezed.dart

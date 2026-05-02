@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- GasGojo brand colors for native Android use (notification tint, splash, etc.) -->
+    <color name="brand_orange">#F97316</color>
+    <color name="asphalt_black">#1C1917</color>
+    <color name="go_green">#22C55E</color>
+    <color name="surface_white">#FAFAF9</color>
+
+    <!-- Used by the Flutter launch theme -->
+    <color name="launch_background">#FFFFFF</color>
+</resources>

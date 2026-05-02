@@ -1,0 +1,53 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Helpers ──────────────────────────────────────────────────────────
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    function isOwner(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+    function isAdmin() {
+      return isSignedIn() && request.auth.token.admin == true;
+    }
+
+    // ── Stations (public read, admin write) ──────────────────────────────
+    match /stations/{stationId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    // ── User data (owner-scoped) ──────────────────────────────────────────
+    match /users/{uid} {
+      allow read, write: if isOwner(uid);
+
+      // Favorites sub-collection
+      match /favorites/{docId} {
+        allow read, write: if isOwner(uid);
+      }
+
+      // Price alerts sub-collection
+      match /alerts/{alertId} {
+        allow read, write: if isOwner(uid);
+        // Hard cap: no more than 20 alerts per user
+        allow create: if isOwner(uid) &&
+          request.resource.data.keys().hasAll(['stationId', 'grade', 'targetPrice', 'notifyEnabled', 'createdAt']);
+      }
+    }
+
+    // ── Price History (public read, auth-gated create) ────────────────────
+    match /priceHistory/{stationId}/entries/{entryId} {
+      allow read: if true;
+      allow create: if isSignedIn()
+        && request.resource.data.reportedBy == request.auth.uid
+        && request.resource.data.price is number
+        && request.resource.data.price > 0
+        && request.resource.data.price < 20  // Sanity ceiling
+        && request.resource.data.grade in ['regular', 'midGrade', 'premium', 'diesel'];
+      allow update, delete: if isAdmin();
+    }
+  }
+}

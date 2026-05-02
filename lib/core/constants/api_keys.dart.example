@@ -1,0 +1,4 @@
+// Copy this file to api_keys.dart and fill in your real keys.
+// NEVER commit api_keys.dart to git.
+const String kGoogleMapsApiKeyWindows = 'YOUR_GOOGLE_MAPS_JS_BROWSER_KEY';
+const String kGoogleMapsApiKeyAndroid = 'YOUR_GOOGLE_MAPS_API_KEY_ANDROID';

@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(/c/src/flutter/bin/flutter build:*)",
+      "Bash(powershell.exe -Command \"Invoke-WebRequest -Uri ''https://aka.ms/vs/17/release/vs_BuildTools.exe'' -OutFile ''C:\\\\Users\\\\joann\\\\Desktop\\\\vs_BuildTools.exe''\")"
+    ]
+  }
+}
