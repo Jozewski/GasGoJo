@@ -23,6 +23,7 @@ class StationDetailScreen extends StatefulWidget {
 class _StationDetailScreenState extends State<StationDetailScreen> {
   bool _isFavorite = false;
   late GasStation _station;
+  bool _priceWasUpdated = false;
 
   @override
   void initState() {
@@ -30,95 +31,108 @@ class _StationDetailScreenState extends State<StationDetailScreen> {
     _station = widget.station;
   }
 
+  void _popWithResult() {
+    Navigator.pop(context, _priceWasUpdated ? _station : null);
+  }
+
   @override
   Widget build(BuildContext context) {
     final station = _station;
-    return Scaffold(
-      backgroundColor: _stationPageBg,
-      body: CustomScrollView(
-        slivers: [
-          // ── App Bar ─────────────────────────────────────────────────────
-          SliverAppBar(
-            pinned: true,
-            expandedHeight: 0,
-            backgroundColor: _stationPageBg,
-            leading: const BackButton(color: _stationTextPrimary),
-            title: Text(
-              station.name,
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(color: _stationTextPrimary),
-            ),
-            centerTitle: false,
-            actions: [
-              IconButton(
-                onPressed: _toggleFavorite,
-                tooltip: _isFavorite ? 'Remove from favorites' : 'Add to favorites',
-                icon: AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 250),
-                  child: Icon(
-                    _isFavorite ? Icons.favorite_rounded : Icons.favorite_border_rounded,
-                    key: ValueKey(_isFavorite),
-                    color: _isFavorite ? AppColors.error : _stationTextSecondary,
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) _popWithResult();
+      },
+      child: Scaffold(
+        backgroundColor: _stationPageBg,
+        body: CustomScrollView(
+          slivers: [
+            // ── App Bar ───────────────────────────────────────────────────
+            SliverAppBar(
+              pinned: true,
+              expandedHeight: 0,
+              backgroundColor: _stationPageBg,
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back, color: _stationTextPrimary),
+                onPressed: _popWithResult,
+              ),
+              title: Text(
+                station.name,
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(color: _stationTextPrimary),
+              ),
+              centerTitle: false,
+              actions: [
+                IconButton(
+                  onPressed: _toggleFavorite,
+                  tooltip: _isFavorite ? 'Remove from favorites' : 'Add to favorites',
+                  icon: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 250),
+                    child: Icon(
+                      _isFavorite ? Icons.favorite_rounded : Icons.favorite_border_rounded,
+                      key: ValueKey(_isFavorite),
+                      color: _isFavorite ? AppColors.error : _stationTextSecondary,
+                    ),
                   ),
                 ),
-              ),
-              IconButton(
-                onPressed: () => _shareStation(station),
-                icon: const Icon(Icons.share_outlined, color: _stationTextSecondary),
-                tooltip: 'Share station',
-              ),
-            ],
-          ),
-
-          SliverToBoxAdapter(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _StationHeader(station: station),
-                const SizedBox(height: 14),
-
-                _StationDataInsights(station: station),
-                const SizedBox(height: 14),
-
-                _CommunityConfidenceCard(station: station),
-                const SizedBox(height: 14),
-
-                _PriceTable(
-                  station: station,
-                  onPriceReported: _handlePriceReported,
+                IconButton(
+                  onPressed: () => _shareStation(station),
+                  icon: const Icon(Icons.share_outlined, color: _stationTextSecondary),
+                  tooltip: 'Share station',
                 ),
-                const SizedBox(height: 14),
-
-                _RecentUpdateTimeline(station: station),
-                const SizedBox(height: 14),
-
-                _CommunityUpdateCta(
-                  station: station,
-                  onPriceReported: _handlePriceReported,
-                ),
-                const SizedBox(height: 14),
-
-                _OwnerDetailsCard(
-                  station: station,
-                  onPriceReported: _handlePriceReported,
-                ),
-                const SizedBox(height: 14),
-
-                _AmenitiesRow(amenities: station.amenities),
-                const SizedBox(height: 14),
-
-                _HoursTile(hours: station.hours),
-                const SizedBox(height: 14),
-
-                _ActionsRow(station: station),
-                const SizedBox(height: 14),
-
-                _PriceAlertCta(station: station),
-
-                const SizedBox(height: 32),
               ],
             ),
-          ),
-        ],
+
+            SliverToBoxAdapter(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _StationHeader(station: station),
+                  const SizedBox(height: 14),
+
+                  _StationDataInsights(station: station),
+                  const SizedBox(height: 14),
+
+                  _CommunityConfidenceCard(station: station),
+                  const SizedBox(height: 14),
+
+                  _PriceTable(
+                    station: station,
+                    onPriceReported: _handlePriceReported,
+                  ),
+                  const SizedBox(height: 14),
+
+                  _RecentUpdateTimeline(station: station),
+                  const SizedBox(height: 14),
+
+                  _CommunityUpdateCta(
+                    station: station,
+                    onPriceReported: _handlePriceReported,
+                  ),
+                  const SizedBox(height: 14),
+
+                  _OwnerDetailsCard(
+                    station: station,
+                    onPriceReported: _handlePriceReported,
+                  ),
+                  const SizedBox(height: 14),
+
+                  _AmenitiesRow(amenities: station.amenities),
+                  const SizedBox(height: 14),
+
+                  _HoursTile(hours: station.hours),
+                  const SizedBox(height: 14),
+
+                  _ActionsRow(station: station),
+                  const SizedBox(height: 14),
+
+                  _PriceAlertCta(station: station),
+
+                  const SizedBox(height: 32),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -134,6 +148,7 @@ class _StationDetailScreenState extends State<StationDetailScreen> {
       ..[report.grade] = report.price;
 
     setState(() {
+      _priceWasUpdated = true;
       _station = _station.copyWith(
         prices: updatedPrices,
         pricesUpdatedAt: DateTime.now(),
@@ -142,7 +157,7 @@ class _StationDetailScreenState extends State<StationDetailScreen> {
 
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('Price updated successfully.'),
+        content: Text('Price updated — showing your data now.'),
         backgroundColor: AppColors.accent,
       ),
     );
@@ -1054,7 +1069,6 @@ class _ReportPriceDialog extends StatefulWidget {
 class _ReportPriceDialogState extends State<_ReportPriceDialog> {
   FuelGrade _selectedGrade = FuelGrade.regular;
   final _priceController = TextEditingController();
-  bool _submitting = false;
 
   @override
   void dispose() {
@@ -1094,14 +1108,8 @@ class _ReportPriceDialogState extends State<_ReportPriceDialog> {
       actions: [
         TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
         FilledButton(
-          onPressed: _submitting ? null : _submitReport,
-          child: _submitting
-              ? const SizedBox(
-                  width: 18,
-                  height: 18,
-                  child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
-                )
-              : const Text('Submit'),
+          onPressed: _submitReport,
+          child: const Text('Submit'),
         ),
       ],
     );
@@ -1118,7 +1126,10 @@ class _ReportPriceDialogState extends State<_ReportPriceDialog> {
       return;
     }
 
-    setState(() => _submitting = true);
+    // Dismiss immediately so the UI feels instant, then write in background
+    final report = _ReportedPrice(grade: _selectedGrade, price: parsed);
+    final messenger = ScaffoldMessenger.of(context);
+    Navigator.pop(context, report);
 
     final repository = GetIt.instance<StationRepository>();
     final result = await repository.reportPrice(
@@ -1128,24 +1139,13 @@ class _ReportPriceDialogState extends State<_ReportPriceDialog> {
       userId: 'anonymous',
     );
 
-    if (!mounted) return;
-
     result.fold(
       (failure) {
-        setState(() => _submitting = false);
-        ScaffoldMessenger.of(context).showSnackBar(
+        messenger.showSnackBar(
           SnackBar(content: Text(failure.message), backgroundColor: AppColors.error),
         );
       },
-      (_) {
-        Navigator.pop(
-          context,
-          _ReportedPrice(
-            grade: _selectedGrade,
-            price: parsed,
-          ),
-        );
-      },
+      (_) {},
     );
   }
 }

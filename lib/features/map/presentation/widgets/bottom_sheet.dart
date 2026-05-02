@@ -97,7 +97,10 @@ class StationBottomSheet extends StatelessWidget {
                           children: [
                             Text(
                               'Nearby now',
-                              style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelMedium
+                                  ?.copyWith(
                                     color: AppColors.primary,
                                   ),
                             ),
@@ -116,14 +119,18 @@ class StationBottomSheet extends StatelessWidget {
                               state is MapLoaded
                                   ? '${(state as MapLoaded).stations.length} results sorted for quick decisions'
                                   : 'Live prices and station details near your current map area',
-                              style: Theme.of(context).textTheme.bodySmall?.copyWith(color: const Color(0xFF94A3B8)),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall
+                                  ?.copyWith(color: const Color(0xFF94A3B8)),
                             ),
                           ],
                         ),
                       ),
                       const SizedBox(width: 12),
                       _FilterButton(
-                        active: state is MapLoaded && (state as MapLoaded).filter.isActive,
+                        active: state is MapLoaded &&
+                            (state as MapLoaded).filter.isActive,
                         onTap: () => _openFilters(context, state),
                       ),
                     ],
@@ -136,7 +143,8 @@ class StationBottomSheet extends StatelessWidget {
                   selected: (state as MapLoaded).sort,
                   stationCount: (state as MapLoaded).stations.length,
                   filterActive: (state as MapLoaded).filter.isActive,
-                  onChanged: (sort) => context.read<MapBloc>().add(MapSortChanged(sort)),
+                  onChanged: (sort) =>
+                      context.read<MapBloc>().add(MapSortChanged(sort)),
                   dark: true,
                 ),
               ],
@@ -162,8 +170,10 @@ class StationBottomSheet extends StatelessWidget {
   }
 
   void _openFilters(BuildContext context, MapState state) async {
-    final currentFilter = state is MapLoaded ? (state).filter : FuelFilter.empty;
-    final result = await context.push<FuelFilter>('/filters', extra: currentFilter);
+    final currentFilter =
+        state is MapLoaded ? (state).filter : FuelFilter.empty;
+    final result =
+        await context.push<FuelFilter>('/filters', extra: currentFilter);
     if (result != null && context.mounted) {
       context.read<MapBloc>().add(MapFiltersApplied(result));
     }
@@ -225,14 +235,18 @@ class StationSidePanel extends StatelessWidget {
                           state is MapLoaded
                               ? '${(state as MapLoaded).stations.length} stations ready to browse'
                               : 'Browse the list without the map taking over scroll',
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(color: const Color(0xFF94A3B8)),
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall
+                              ?.copyWith(color: const Color(0xFF94A3B8)),
                         ),
                       ],
                     ),
                   ),
                   const SizedBox(width: 12),
                   _FilterButton(
-                    active: state is MapLoaded && (state as MapLoaded).filter.isActive,
+                    active: state is MapLoaded &&
+                        (state as MapLoaded).filter.isActive,
                     onTap: () => _openFilters(context, state),
                   ),
                 ],
@@ -244,7 +258,8 @@ class StationSidePanel extends StatelessWidget {
               selected: (state as MapLoaded).sort,
               stationCount: (state as MapLoaded).stations.length,
               filterActive: (state as MapLoaded).filter.isActive,
-              onChanged: (sort) => context.read<MapBloc>().add(MapSortChanged(sort)),
+              onChanged: (sort) =>
+                  context.read<MapBloc>().add(MapSortChanged(sort)),
               dark: true,
             ),
           const Divider(height: 1, color: Color(0xFF1E293B)),
@@ -264,7 +279,8 @@ class StationSidePanel extends StatelessWidget {
 
   void _openFilters(BuildContext context, MapState state) async {
     final currentFilter = state is MapLoaded ? state.filter : FuelFilter.empty;
-    final result = await context.push<FuelFilter>('/filters', extra: currentFilter);
+    final result =
+        await context.push<FuelFilter>('/filters', extra: currentFilter);
     if (result != null && context.mounted) {
       context.read<MapBloc>().add(MapFiltersApplied(result));
     }
@@ -333,9 +349,10 @@ class StationMobilePanel extends StatelessWidget {
                       children: [
                         Text(
                           'Nearby now',
-                          style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                                color: AppColors.primary,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.labelMedium?.copyWith(
+                                    color: AppColors.primary,
+                                  ),
                         ),
                         const SizedBox(height: 2),
                         Text(
@@ -354,7 +371,8 @@ class StationMobilePanel extends StatelessWidget {
                   ),
                   const SizedBox(width: 12),
                   _FilterButton(
-                    active: state is MapLoaded && (state as MapLoaded).filter.isActive,
+                    active: state is MapLoaded &&
+                        (state as MapLoaded).filter.isActive,
                     onTap: () => _openFilters(context, state),
                   ),
                 ],
@@ -366,7 +384,8 @@ class StationMobilePanel extends StatelessWidget {
               selected: (state as MapLoaded).sort,
               stationCount: (state as MapLoaded).stations.length,
               filterActive: (state as MapLoaded).filter.isActive,
-              onChanged: (sort) => context.read<MapBloc>().add(MapSortChanged(sort)),
+              onChanged: (sort) =>
+                  context.read<MapBloc>().add(MapSortChanged(sort)),
               dark: true,
             ),
           const Divider(height: 1, color: Color(0xFF1E293B)),
@@ -386,7 +405,8 @@ class StationMobilePanel extends StatelessWidget {
 
   void _openFilters(BuildContext context, MapState state) async {
     final currentFilter = state is MapLoaded ? state.filter : FuelFilter.empty;
-    final result = await context.push<FuelFilter>('/filters', extra: currentFilter);
+    final result =
+        await context.push<FuelFilter>('/filters', extra: currentFilter);
     if (result != null && context.mounted) {
       context.read<MapBloc>().add(MapFiltersApplied(result));
     }
@@ -410,7 +430,8 @@ class _FilterButton extends StatelessWidget {
           decoration: BoxDecoration(
             color: active ? AppColors.primary : const Color(0xFF1E293B),
             borderRadius: BorderRadius.circular(18),
-            border: Border.all(color: active ? AppColors.primary : const Color(0xFF334155)),
+            border: Border.all(
+                color: active ? AppColors.primary : const Color(0xFF334155)),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -463,19 +484,23 @@ class _SheetContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return switch (state) {
-      MapInitial() || MapLocationLoading() => const LoadingOverlay(message: 'Finding your location...'),
+      MapInitial() ||
+      MapLocationLoading() =>
+        const LoadingOverlay(message: 'Finding your location...'),
       MapLoading() => const ShimmerList(),
       MapEmpty() => const EmptyState(
           icon: Icons.local_gas_station_outlined,
           title: 'No stations in this area',
-          subtitle: 'Try zooming out or adjusting your filters to find more stations.',
+          subtitle:
+              'Try zooming out or adjusting your filters to find more stations.',
         ),
       MapError(:final message) => ErrorView(
           message: message,
           icon: message.contains('location') || message.contains('Location')
               ? Icons.location_off_outlined
               : Icons.wifi_off_rounded,
-          onRetry: () => context.read<MapBloc>().add(const MapRefreshRequested()),
+          onRetry: () =>
+              context.read<MapBloc>().add(const MapRefreshRequested()),
         ),
       MapLoaded(:final sorted) => _StationList(
           stations: sorted,
@@ -505,7 +530,9 @@ class _StationList extends StatelessWidget {
 
   PriceTier _tier(GasStation station) {
     final p = station.regularPrice;
-    if (p == null || minPrice == null || maxPrice == null) return PriceTier.neutral;
+    if (p == null || minPrice == null || maxPrice == null) {
+      return PriceTier.neutral;
+    }
     if (maxPrice == minPrice) return PriceTier.neutral;
     final range = maxPrice! - minPrice!;
     if (p <= minPrice! + range * 0.33) return PriceTier.cheap;
@@ -534,7 +561,16 @@ class _StationList extends StatelessWidget {
           station: station,
           priceTier: _tier(station),
           isFavorite: favoriteIds.contains(station.id),
-          onTap: () => context.push('/station/${station.id}', extra: station),
+          onTap: () async {
+            final bloc = context.read<MapBloc>();
+            final updated = await context.push<GasStation>(
+              '/station/${station.id}',
+              extra: station,
+            );
+            if (updated != null) {
+              bloc.add(MapStationPriceUpdated(updated));
+            }
+          },
         );
       },
     );
